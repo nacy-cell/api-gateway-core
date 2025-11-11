@@ -2,6 +2,8 @@ package com.saka.gateway.session;
 
 public interface GatewaySessionFactory {
 
-    GatewaySession openSession();
+    GatewaySession openSession(String uri);
+
+
 
 }
