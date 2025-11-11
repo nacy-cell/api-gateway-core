@@ -1,5 +1,7 @@
 package com.saka;
 
+import com.saka.gateway.session.Configuration;
+import com.saka.gateway.session.GenericReferenceSessionFactoryBuilder;
 import com.saka.gateway.session.SessionServer;
 import io.netty.channel.Channel;
 import org.junit.Test;
@@ -15,22 +17,17 @@ public class ApiTest {
     private final Logger logger = LoggerFactory.getLogger(ApiTest.class);
 
     @Test
-    public void test() throws ExecutionException, InterruptedException {
-        SessionServer server = new SessionServer();
+    public void test_GenericReference() throws InterruptedException, ExecutionException {
+        Configuration configuration = new Configuration();
+        configuration.addGenericReference("api-gateway-test", "cn.bugstack.gateway.rpc.IActivityBooth", "sayHi");
 
-        Future<Channel> future = Executors.newFixedThreadPool(2).submit(server);
-        Channel channel = future.get();
+        GenericReferenceSessionFactoryBuilder builder = new GenericReferenceSessionFactoryBuilder();
+        Future<Channel> future = builder.build(configuration);
 
-        if (null == channel) throw new RuntimeException("netty server start error channel is null");
-
-        while (!channel.isActive()) {
-            logger.info("NettyServer启动服务 ...");
-            Thread.sleep(500);
-        }
-
-        logger.info("NettyServer启动服务完成 {}", channel.localAddress());
+        logger.info("服务启动完成 {}", future.get().id());
 
         Thread.sleep(Long.MAX_VALUE);
     }
+
 
 }

@@ -21,6 +21,11 @@ public class SessionServer implements Callable<Channel> {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private  Channel serverChannel;
+    private final Configuration configuration;
+
+    public SessionServer(Configuration configuration){
+        this.configuration = configuration;
+    }
 
     @Override
     public Channel call() throws Exception {
@@ -31,7 +36,7 @@ public class SessionServer implements Callable<Channel> {
             bootstrap.group(bossGroup,workerGroup)
                     .channel(NioServerSocketChannel.class) // 指定服务端通道类型
                     .option(ChannelOption.SO_BACKLOG,128)// 设置 TCP 积压队列大小
-                    .childHandler(new SessionChannelInitializer());
+                    .childHandler(new SessionChannelInitializer(configuration));
             channelFuture = bootstrap.bind(new InetSocketAddress(7397)).syncUninterruptibly();
             this.serverChannel = channelFuture.channel();
         } catch (Exception e) {
