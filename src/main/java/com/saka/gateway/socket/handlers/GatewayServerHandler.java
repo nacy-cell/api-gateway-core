@@ -1,24 +1,25 @@
-package com.saka.gateway.session.handler;
+package com.saka.gateway.socket.handlers;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.saka.gateway.bind.IGenericReference;
-import com.saka.gateway.session.BaseHandler;
-import com.saka.gateway.session.Configuration;
+import com.saka.gateway.session.GatewaySession;
+import com.saka.gateway.session.defaults.DefaultGatewaySessionFactory;
+import com.saka.gateway.socket.BaseHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
+public class GatewayServerHandler extends BaseHandler<FullHttpRequest> {
 
-    private final Logger logger = LoggerFactory.getLogger(SessionServerHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(GatewayServerHandler.class);
 
-    private final Configuration configuration;
+    private final DefaultGatewaySessionFactory gatewaySessionFactory;
 
-    public SessionServerHandler(Configuration configuration) {
-        this.configuration = configuration;
+    public GatewayServerHandler(DefaultGatewaySessionFactory gatewaySessionFactory) {
+        this.gatewaySessionFactory = gatewaySessionFactory;
     }
 
     @Override
@@ -26,15 +27,15 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
         logger.info("网关接收请求 uri：{} method：{}", request.uri(), request.method());
 
         // 返回信息控制：简单处理
-        String methodName = request.uri().substring(1);
-        if (methodName.equals("favicon.ico")) return;
+        String uri = request.uri();
+        if (uri.equals("/favicon.ico")) return;
+
+        GatewaySession gatewaySession = gatewaySessionFactory.openSession();
+        IGenericReference reference = gatewaySession.getMapper(uri);
+        String result = reference.$invoke(request.uri()+" "+request.method()) + " " + System.currentTimeMillis();
 
         // 返回信息处理
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
-
-        // 服务泛化调用
-        IGenericReference reference = configuration.getGenericReference("sayHi");
-        String result = reference.$invoke(methodName) + " " + System.currentTimeMillis();
 
         // 设置回写数据
         response.content().writeBytes(JSON.toJSONBytes(result, SerializerFeature.PrettyFormat));
@@ -57,3 +58,4 @@ public class SessionServerHandler extends BaseHandler<FullHttpRequest> {
     }
 
 }
+

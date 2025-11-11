@@ -1,4 +1,4 @@
-package com.saka.gateway.session;
+package com.saka.gateway.socket;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
