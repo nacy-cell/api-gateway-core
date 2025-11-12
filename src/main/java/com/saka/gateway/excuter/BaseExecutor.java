@@ -1,8 +1,8 @@
 package com.saka.gateway.excuter;
 
 import com.alibaba.fastjson.JSON;
-import com.saka.gateway.excuter.result.GatewayResult;
 import com.saka.gateway.datasource.Connection;
+import com.saka.gateway.excuter.result.SessionResult;
 import com.saka.gateway.mapping.HttpStatement;
 import com.saka.gateway.session.Configuration;
 import com.saka.gateway.type.SimpleTypeRegistry;
@@ -24,7 +24,7 @@ public abstract class BaseExecutor implements Executor {
     }
 
     @Override
-    public GatewayResult exec(HttpStatement httpStatement, Map<String, Object> params) throws Exception {
+    public SessionResult exec(HttpStatement httpStatement, Map<String, Object> params) throws Exception {
         // 参数处理；后续的一些参数校验也可以在这里封装。
         String methodName = httpStatement.getMethodName();
         String parameterType = httpStatement.getParameterType();
@@ -34,9 +34,9 @@ public abstract class BaseExecutor implements Executor {
         // 抽象方法
         try {
             Object data = doExec(methodName, parameterTypes, args);
-            return GatewayResult.buildSuccess(data);
+            return SessionResult.buildSuccess(data);
         } catch (Exception e) {
-            return GatewayResult.buildError(e.getMessage());
+            return SessionResult.buildError(e.getMessage());
         }
     }
 

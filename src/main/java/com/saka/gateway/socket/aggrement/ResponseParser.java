@@ -2,10 +2,9 @@ package com.saka.gateway.socket.aggrement;
 
 import com.alibaba.fastjson.JSON;
 import io.netty.handler.codec.http.*;
-
 public class ResponseParser {
 
-    public DefaultFullHttpResponse parse(Object result) {
+    public DefaultFullHttpResponse parse(GatewayResultMessage result) {
         // 返回信息处理
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK);
         // 设置回写数据

@@ -13,6 +13,4 @@ public interface GatewaySession {
     IGenericReference getMapper();
 
     Configuration getConfiguration();
-
-
 }

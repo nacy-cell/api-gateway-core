@@ -1,5 +1,6 @@
 package com.saka.gateway.socket;
 
+import com.saka.gateway.session.Configuration;
 import com.saka.gateway.session.defaults.DefaultGatewaySessionFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -18,13 +19,15 @@ public class GatewaySocketServer implements Callable<Channel> {
 
     private final Logger logger = LoggerFactory.getLogger(GatewaySocketServer.class);
 
+    private final Configuration configuration;
     private DefaultGatewaySessionFactory gatewaySessionFactory;
 
     private final EventLoopGroup boss = new NioEventLoopGroup(1);
     private final EventLoopGroup work = new NioEventLoopGroup();
     private Channel channel;
 
-    public GatewaySocketServer(DefaultGatewaySessionFactory gatewaySessionFactory) {
+    public GatewaySocketServer(Configuration configuration, DefaultGatewaySessionFactory gatewaySessionFactory) {
+        this.configuration = configuration;
         this.gatewaySessionFactory = gatewaySessionFactory;
     }
 
@@ -36,7 +39,7 @@ public class GatewaySocketServer implements Callable<Channel> {
             b.group(boss, work)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
-                    .childHandler(new GatewayChannelInitializer(gatewaySessionFactory));
+                    .childHandler(new GatewayChannelInitializer(configuration, gatewaySessionFactory));
 
             channelFuture = b.bind(new InetSocketAddress(7397)).syncUninterruptibly();
             this.channel = channelFuture.channel();
