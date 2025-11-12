@@ -1,5 +1,6 @@
 package com.saka.gateway.session.defaults;
 
+import com.saka.excuter.Executor;
 import com.saka.gateway.bind.IGenericReference;
 import com.saka.gateway.datasource.Connection;
 import com.saka.gateway.datasource.DataSource;
@@ -20,24 +21,22 @@ public class DefaultGatewaySession implements GatewaySession {
 
     private Configuration configuration;
     private String uri;
-    private DataSource dataSource;
+    private Executor executor;
 
-    public DefaultGatewaySession(Configuration configuration, String uri, DataSource dataSource) {
+    public DefaultGatewaySession(Configuration configuration, String uri, Executor executor) {
         this.configuration = configuration;
         this.uri = uri;
-        this.dataSource = dataSource;
+        this.executor = executor;
     }
-
 
     @Override
     public Object get(String methodName, Map<String, Object> params) {
-        Connection connection = dataSource.getConnection();
         HttpStatement httpStatement = configuration.getHttpStatement(uri);
-        String parameterType = httpStatement.getParameterType();
-        return connection.execute(methodName,
-                new String[]{parameterType},
-                new String[]{"ignore"},
-                SimpleTypeRegistry.isSimpleType(parameterType) ? params.values().toArray() : new Object[]{params});
+        try {
+            return executor.exec(httpStatement, params);
+        } catch (Exception e) {
+            throw new RuntimeException("Error exec get. Cause: " + e);
+        }
     }
 
     @Override

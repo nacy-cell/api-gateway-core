@@ -1,7 +1,10 @@
 package com.saka.gateway.session;
 
+import com.saka.excuter.Executor;
+import com.saka.excuter.SimpleExecutor;
 import com.saka.gateway.bind.IGenericReference;
 import com.saka.gateway.bind.MapperRegistry;
+import com.saka.gateway.datasource.Connection;
 import com.saka.gateway.mapping.HttpStatement;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
@@ -71,5 +74,10 @@ public class Configuration {
     public HttpStatement getHttpStatement(String uri) {
         return httpStatements.get(uri);
     }
+
+    public Executor newExecutor(Connection connection) {
+        return new SimpleExecutor(this, connection);
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.saka.gateway.session.defaults;
 
+import com.saka.excuter.Executor;
 import com.saka.gateway.datasource.DataSource;
 import com.saka.gateway.datasource.DataSourceFactory;
 import com.saka.gateway.datasource.unpooled.UnpooledDataSourceFactory;
@@ -21,9 +22,10 @@ public class DefaultGatewaySessionFactory implements GatewaySessionFactory {
         DataSourceFactory dataSourceFactory = new UnpooledDataSourceFactory();
         dataSourceFactory.setProperties(configuration, uri);
         DataSource dataSource = dataSourceFactory.getDataSource();
-
-        return new DefaultGatewaySession(configuration, uri, dataSource);
+        // 创建执行器
+        Executor executor = configuration.newExecutor(dataSource.getConnection());
+        // 创建会话：DefaultGatewaySession
+        return new DefaultGatewaySession(configuration, uri, executor);
     }
-
 
 }
