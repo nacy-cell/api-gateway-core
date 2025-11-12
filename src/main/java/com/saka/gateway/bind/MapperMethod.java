@@ -6,6 +6,7 @@ import com.saka.gateway.session.Configuration;
 import com.saka.gateway.session.GatewaySession;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 public class MapperMethod {
 
@@ -17,13 +18,14 @@ public class MapperMethod {
         this.command = configuration.getHttpStatement(uri).getHttpCommandType();
     }
 
-    public Object execute(GatewaySession session, Object args) {
+    public Object execute(GatewaySession session, Map<String, Object> params) {
         Object result = null;
         switch (command) {
             case GET:
-                result = session.get(methodName, args);
+                result = session.get(methodName, params);
                 break;
             case POST:
+                result = session.post(methodName, params);
                 break;
             case PUT:
                 break;
@@ -34,6 +36,7 @@ public class MapperMethod {
         }
         return result;
     }
+
 
 
 

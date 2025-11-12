@@ -2,9 +2,13 @@ package com.saka.gateway.session;
 
 import com.saka.gateway.bind.IGenericReference;
 
+import java.util.Map;
+
 public interface GatewaySession {
 
-    Object get(String methodName, Object parameter);
+    Object get(String methodName, Map<String, Object> params);
+
+    Object post(String methodName, Map<String, Object> params);
 
     IGenericReference getMapper();
 

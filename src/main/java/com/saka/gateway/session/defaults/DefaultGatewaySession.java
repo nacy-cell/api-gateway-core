@@ -6,12 +6,15 @@ import com.saka.gateway.datasource.DataSource;
 import com.saka.gateway.mapping.HttpStatement;
 import com.saka.gateway.session.Configuration;
 import com.saka.gateway.session.GatewaySession;
+import com.saka.type.SimpleTypeRegistry;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.bootstrap.DubboBootstrap;
 import org.apache.dubbo.config.utils.ReferenceConfigCache;
 import org.apache.dubbo.rpc.service.GenericService;
+
+import java.util.Map;
 
 public class DefaultGatewaySession implements GatewaySession {
 
@@ -27,11 +30,20 @@ public class DefaultGatewaySession implements GatewaySession {
 
 
     @Override
-    public Object get(String methodName, Object parameter) {
+    public Object get(String methodName, Map<String, Object> params) {
         Connection connection = dataSource.getConnection();
-        return connection.execute(methodName, new String[]{"java.lang.String"}, new String[]{"name"}, new Object[]{parameter});
+        HttpStatement httpStatement = configuration.getHttpStatement(uri);
+        String parameterType = httpStatement.getParameterType();
+        return connection.execute(methodName,
+                new String[]{parameterType},
+                new String[]{"ignore"},
+                SimpleTypeRegistry.isSimpleType(parameterType) ? params.values().toArray() : new Object[]{params});
     }
 
+    @Override
+    public Object post(String methodName, Map<String, Object> params) {
+        return get(methodName, params);
+    }
 
     @Override
     public IGenericReference getMapper() {
