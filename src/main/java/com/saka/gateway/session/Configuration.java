@@ -1,7 +1,7 @@
 package com.saka.gateway.session;
 
-import com.saka.excuter.Executor;
-import com.saka.excuter.SimpleExecutor;
+import com.saka.gateway.excuter.Executor;
+import com.saka.gateway.excuter.SimpleExecutor;
 import com.saka.gateway.bind.IGenericReference;
 import com.saka.gateway.bind.MapperRegistry;
 import com.saka.gateway.datasource.Connection;

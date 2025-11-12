@@ -1,4 +1,4 @@
-package com.saka.type;
+package com.saka.gateway.type;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
