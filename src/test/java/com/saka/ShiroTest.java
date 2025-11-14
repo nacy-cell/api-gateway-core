@@ -1,8 +1,8 @@
 package com.saka;
 
-import com.saka.gateway.authorization.IAuth;
-import com.saka.gateway.authorization.JwtUtil;
-import com.saka.gateway.authorization.auth.AuthService;
+import com.saka.gateway.core.authorization.IAuth;
+import com.saka.gateway.core.authorization.JwtUtil;
+import com.saka.gateway.core.authorization.auth.AuthService;
 import io.jsonwebtoken.Claims;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
