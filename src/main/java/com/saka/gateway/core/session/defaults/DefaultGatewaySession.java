@@ -36,6 +36,16 @@ public class DefaultGatewaySession implements GatewaySession {
     }
 
     @Override
+    public Object put(String methodName, Map<String, Object> params) {
+        return get(methodName, params);
+    }
+
+    @Override
+    public Object delete(String methodName, Map<String, Object> params) {
+        return get(methodName, params);
+    }
+
+    @Override
     public IGenericReference getMapper() {
         return configuration.getMapper(uri, this);
     }

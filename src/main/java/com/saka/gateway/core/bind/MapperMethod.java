@@ -28,8 +28,10 @@ public class MapperMethod {
                 result = session.post(methodName, params);
                 break;
             case PUT:
+                result = session.put(methodName, params);
                 break;
             case DELETE:
+                result = session.delete(methodName, params);
                 break;
             default:
                 throw new RuntimeException("Unknown execution method for: " + command);

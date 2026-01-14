@@ -13,5 +13,9 @@ public interface GatewaySession {
     IGenericReference getMapper();
 
     Configuration getConfiguration();
+
+    Object put(String methodName, Map<String, Object> params);
+
+    Object delete(String methodName, Map<String, Object> params);
 }
 
