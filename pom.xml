@@ -62,12 +62,12 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-        <!-- Dubbo依赖 -->
         <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo</artifactId>
-            <version>2.7.5</version>
+            <version>3.2.0</version>
             <exclusions>
+                <!-- 保留原有日志依赖排除，避免 log4j 冲突 -->
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
@@ -79,17 +79,42 @@
             </exclusions>
         </dependency>
 
-        <!-- 升级ZooKeeper客户端 -->
+        <!-- 升级 Zookeeper 客户端（保持 3.9.4 稳定版，与 Dubbo 3.2.0 兼容） -->
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.9.4</version> <!-- 与服务端版本一致 -->
+            <version>3.9.4</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!-- 核心：Dubbo 3.2.0 Nacos 注册中心适配器（替换原 2.7.5，版本与核心依赖严格一致） -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-registry-nacos</artifactId>
+            <version>3.2.0</version>
+            <exclusions>
+                <!-- 按需排除冲突依赖，保留必要排除 -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <!-- 排除自带的 Nacos 客户端，统一使用下方指定版本 -->
+                <exclusion>
+                    <groupId>com.alibaba.nacos</groupId>
+                    <artifactId>nacos-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.2.0</version>
         </dependency>
 
         <!-- 升级Curator -->
