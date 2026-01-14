@@ -42,7 +42,7 @@ public class ProtocolDataHandler extends BaseHandler<FullHttpRequest> {
             SessionResult result = reference.$invoke(args);
 
             // 3. 封装返回结果
-            DefaultFullHttpResponse response = new ResponseParser().parse("0000".equals(result.getCode()) ? GatewayResultMessage.buildSuccess(result.getData()) : GatewayResultMessage.buildError(AgreementConstants.ResponseCode._404.getCode(), "网关协议调用失败！"));
+            DefaultFullHttpResponse response = new ResponseParser().parse("0000".equals(result.getCode()) ? GatewayResultMessage.buildSuccess(result) : GatewayResultMessage.buildError(result));
             channel.writeAndFlush(response);
         } catch (Exception e) {
             // 4. 封装返回结果
