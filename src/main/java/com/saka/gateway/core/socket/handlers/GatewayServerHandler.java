@@ -35,6 +35,12 @@ public class GatewayServerHandler extends BaseHandler<FullHttpRequest> {
             HttpStatement httpStatement = configuration.getHttpStatement(uri);
             channel.attr(AgreementConstants.HTTP_STATEMENT).set(httpStatement);
 
+            if(!httpStatement.getHttpCommandType().toString().equals(request.method().name())) {
+                DefaultFullHttpResponse response = new ResponseParser().parse(GatewayResultMessage.buildError(AgreementConstants.ResponseCode._405.getCode(), AgreementConstants.ResponseCode._405.getInfo()));
+                channel.writeAndFlush(response);
+                return;
+            }
+
             // 3. 放行服务
             request.retain();
             ctx.fireChannelRead(request);
