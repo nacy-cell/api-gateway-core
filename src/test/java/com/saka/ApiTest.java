@@ -96,7 +96,7 @@ public class ApiTest {
                 false,
                 true,
                 5,
-                1);
+                10);
         configuration.addMapper(httpStatement01);
         Thread.sleep(Long.MAX_VALUE);
     }

@@ -39,12 +39,12 @@ public class RequestParser {
     public Map<String, Object> parse() {
         // 获取请求类型
         HttpMethod method = request.method();
-        if (HttpMethod.GET == method) {
+        if (HttpMethod.GET == method || HttpMethod.DELETE == method) {
             Map<String, Object> parameterMap = new HashMap<>();
             QueryStringDecoder decoder = new QueryStringDecoder(request.uri());
             decoder.parameters().forEach((key, value) -> parameterMap.put(key, value.get(0)));
             return parameterMap;
-        } else if (HttpMethod.POST == method) {
+        } else if (HttpMethod.POST == method || HttpMethod.PUT == method) {
             // 获取 Content-type
             String contentType = getContentType();
             switch (contentType) {

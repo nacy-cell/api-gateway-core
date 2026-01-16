@@ -19,12 +19,22 @@ public class SessionResult {
     }
 
     public static SessionResult buildSuccess(Object data){
-        Response targetDTO = JSON.parseObject(JSON.toJSONString(data), Response.class);
+        Response targetDTO;
+        try {
+            targetDTO = JSON.parseObject(JSON.toJSONString(data), Response.class);
+        }catch (Exception e){
+            targetDTO = new Response(null,null,data);
+        }
         return new SessionResult("0000","调用成功", targetDTO.getCode(),targetDTO.getInfo(),targetDTO.getData());
     }
 
     public static SessionResult buildError(Object data){
-        Response targetDTO = JSON.parseObject(JSON.toJSONString(data), Response.class);
+        Response targetDTO;
+        try {
+            targetDTO = JSON.parseObject(JSON.toJSONString(data), Response.class);
+        }catch (Exception e){
+            targetDTO = new Response(null,null,data);
+        }
         return new SessionResult("0001","调用失败", targetDTO.getCode(),targetDTO.getInfo(),targetDTO.getData());
     }
 
