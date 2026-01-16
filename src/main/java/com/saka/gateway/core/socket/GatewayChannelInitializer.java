@@ -4,6 +4,7 @@ import com.saka.gateway.core.session.Configuration;
 import com.saka.gateway.core.session.defaults.DefaultGatewaySessionFactory;
 import com.saka.gateway.core.socket.handlers.AuthorizationHandler;
 import com.saka.gateway.core.socket.handlers.GatewayServerHandler;
+import com.saka.gateway.core.socket.handlers.LimitServerHandler;
 import com.saka.gateway.core.socket.handlers.ProtocolDataHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -30,6 +31,7 @@ public class GatewayChannelInitializer extends ChannelInitializer<SocketChannel>
         line.addLast(new HttpResponseEncoder());
         line.addLast(new HttpObjectAggregator(1024 * 1024));
         line.addLast(new GatewayServerHandler(configuration));
+        line.addLast(new LimitServerHandler(configuration));
         line.addLast(new AuthorizationHandler(configuration));
         line.addLast(new ProtocolDataHandler(gatewaySessionFactory));
     }

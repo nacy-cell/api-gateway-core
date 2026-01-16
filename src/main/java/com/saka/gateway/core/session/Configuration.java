@@ -7,6 +7,8 @@ import com.saka.gateway.core.excuter.SimpleExecutor;
 import com.saka.gateway.core.bind.IGenericReference;
 import com.saka.gateway.core.bind.MapperRegistry;
 import com.saka.gateway.core.datasource.Connection;
+import com.saka.gateway.core.limiter.LimitStrategyFactory;
+import com.saka.gateway.core.limiter.strategy.LimitStrategy;
 import com.saka.gateway.core.mapping.HttpStatement;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
@@ -133,4 +135,9 @@ public class Configuration {
     public void setWorkNThreads(int workNThreads) {
         this.workNThreads = workNThreads;
     }
+
+    public LimitStrategy buildLimiter(String methodId, int limitType, int qps) {
+        return LimitStrategyFactory.createLimitStrategy(methodId,limitType,qps);
+    }
+
 }

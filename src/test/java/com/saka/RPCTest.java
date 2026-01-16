@@ -16,7 +16,7 @@ import java.util.Map;
 public class RPCTest {
 
     @Test
-    public void test_rpc() {
+    public void test_rpc() throws InterruptedException {
         ApplicationConfig application = new ApplicationConfig();
         application.setName("api-gateway-test");
         application.setQosEnable(false);
@@ -54,6 +54,7 @@ public class RPCTest {
 
         // 8. 可选：关闭 DubboBootstrap（测试场景推荐，释放资源）
         bootstrap.stop();
+
     }
 
     @Test
